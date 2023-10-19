@@ -1,5 +1,6 @@
 import getCurrentUser from "@/app/action/getCurrentUser";
 import prisma from '@/app/libs/prismadb'
+import { pusherServer } from "@/app/libs/pusher";
 import { NextResponse } from "next/server";
 
 export async function POST(request : Request){
@@ -65,6 +66,17 @@ export async function POST(request : Request){
                     }
                 }
             }
+        });
+
+        await pusherServer.trigger(conversationId, 'messages:new', newMessage);
+
+        const lastMessage =  updateConversation.messages[updateConversation.messages.length - 1];
+
+        updateConversation.users.map((user)=>{
+            pusherServer.trigger(user.email!,'conversation:update',{
+                id:conversationId,
+                message: [lastMessage]
+            })
         });
 
         return NextResponse.json(newMessage);
