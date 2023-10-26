@@ -7,6 +7,7 @@ import Avatar from "../Avatar";
 import { User } from "@prisma/client";
 import SettingsModal from "./SettingsModal";
 import { useState } from "react";
+import LogoutModal from "./LogoutModal";
 
 interface MobileFooterProps {
   currentUser: User
@@ -16,7 +17,7 @@ const MobileFooter: React.FC<MobileFooterProps> = ({
   currentUser
 }) => {
 
-  const routes = useRoutes();
+  const {routes,showLogoutWarning,setShowLogoutWarning} = useRoutes();
   const { isOpen } = useConversation();
   const [isOpenSetting, SetIsOpenSetting] = useState(false);
 
@@ -31,6 +32,11 @@ const MobileFooter: React.FC<MobileFooterProps> = ({
         currentUser={currentUser}
         isOpen={isOpenSetting}
         onClose={() => SetIsOpenSetting(false)}
+      />
+
+      <LogoutModal
+      isOpen={showLogoutWarning}
+      onClose={()=>setShowLogoutWarning(false)}
       />
 
       <div

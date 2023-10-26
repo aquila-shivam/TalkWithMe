@@ -6,6 +6,7 @@ import DesktopItem from "./DesktopItem";
 import {User} from "@prisma/client"
 import Avatar from "../Avatar";
 import SettingsModal from "./SettingsModal";
+import LogoutModal from "./LogoutModal";
 
 interface DesktopSidebarProps{
   currentUser : User
@@ -15,7 +16,7 @@ const DesktopSidebar:React.FC<DesktopSidebarProps> = ({
   currentUser
 }) => {
 
-  const routes = useRoutes();
+  const {routes,showLogoutWarning,setShowLogoutWarning} = useRoutes();
   const [isOpen,setIsOpen] = useState(false)
   return (
     <>
@@ -23,6 +24,10 @@ const DesktopSidebar:React.FC<DesktopSidebarProps> = ({
     currentUser ={currentUser}
     isOpen={isOpen}
     onClose={()=>setIsOpen(false)}
+    />
+    <LogoutModal
+    isOpen={showLogoutWarning}
+    onClose={()=>setShowLogoutWarning(false)}
     />
     <div className="
       hidden
